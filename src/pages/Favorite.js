@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Text, View, StyleSheet, Button } from 'react-native'
 
 const Favorite = (props) => {
@@ -35,4 +36,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Favorite
+export default connect()(Favorite)

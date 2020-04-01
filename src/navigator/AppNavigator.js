@@ -1,42 +1,89 @@
+import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createSwitchNavigator } from '@react-navigation/compat'
+import { NavigationContainer } from '@react-navigation/native'
+import { connect } from 'react-redux'
+// import { createReduxContainer, createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers'
 import Welcome from '../pages/Welcome'
 import Home from '../pages/Home'
 import Detail from '../pages/Detail'
 
-const InitNavigator = createStackNavigator({
-  Welcome: {
-    screen: Welcome,
-    navigationOptions: {
-      header: null
-    }
-  }
-})
+const InitStack = createStackNavigator()
+const MainStack = createStackNavigator()
+const Stack = createStackNavigator()
 
-const MainNavigator = createStackNavigator({
-  Home: {
-    screen: Home,
-    navigationOptions: {
+const InitScreen = () => {
+  return (
+    <InitStack.Navigator
+      initialRouteName="Welcome"
+    >
+      <InitStack.Screen
+        name="Welcome"
+        component={Welcome}
+        options={{
+          headerShown: false
+        }}
+      />
+    </InitStack.Navigator>
+  )
+}
 
-    }
-  },
-  Detail: {
-    screen: Detail,
-    navigationOptions: {
+const MainScreen = () => {
+  return (
+    <MainStack.Navigator
+      initialRouteName="Home"
+    >
+      <MainStack.Screen
+        name="Home"
+        component={Home}
+        options={(route, navigation) => {
+          // alert(JSON.stringify(route))
+          return {
+            headerShown: false
+          }
+        }}
+      />
+      <MainStack.Screen
+        name="Detail"
+        component={Detail}
+      />
+    </MainStack.Navigator>
+  )
+}
 
-    }
-  }
-})
+export const AppNavigator = (props) => {
+  return (
+    <NavigationContainer>
+      {
+        props.welcome ? <InitScreen /> : <MainScreen />
+      }
+      {/* <Stack.Navigator
+        initialRouteName="Init"
+      >
+        <Stack.Screen
+          name="Init"
+          component={InitScreen}
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="Main"
+          component={MainScreen}
+          options={{
+            headerShown: false
+          }}
+        />
+      </Stack.Navigator> */}
+    </NavigationContainer>
+  )
+}
 
-const SwitchNavigator = createSwitchNavigator({
-  Init: InitNavigator,
-  Main: MainNavigator
-}, {
-  navigationOptions: {
-    header: null
-  }
-})
+const mapStateToProps = (state) => ({
+  welcome: state.welcome.welcome
+});
+const AppWithNavigationState = connect(mapStateToProps)(AppNavigator)
 
-export default SwitchNavigator
+export default AppWithNavigationState

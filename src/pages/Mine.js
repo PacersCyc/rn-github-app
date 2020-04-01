@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Text, View, StyleSheet } from 'react-native'
 
 const Mine = () => {
@@ -23,4 +24,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Mine
+export default connect()(Mine)

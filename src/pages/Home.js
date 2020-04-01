@@ -1,6 +1,8 @@
-import React from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import React, { useEffect } from 'react'
+import { Text, View, StyleSheet, BackHandler } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { CommonActions } from '@react-navigation/core'
+// import { CommonActions } from '@react-navigation/routers'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -12,67 +14,26 @@ import DynamicTabNavigator from '../navigator/DynamicTabNavigator'
 
 const BottomTab = createBottomTabNavigator()
 
-const Home = () => {
+const Home = (props) => {
+  // alert(JSON.stringify(props))
+
+  const onBackPress = () => {
+    alert('back---' + JSON.stringify(props.navigation))
+    props.navigation.dispatch(
+      CommonActions.goBack()
+    )
+    return true
+  }
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', onBackPress)
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', onBackPress)
+    }
+  }, [])
+
   return (
     <DynamicTabNavigator />
-    // <BottomTab.Navigator>
-    //   <BottomTab.Screen
-    //     name="Popular"
-    //     component={Popular}
-    //     options={{
-    //       tabBarLabel: '最热',
-    //       tabBarIcon: ({ focused, color, size }) => (
-    //         <MaterialIcons 
-    //           name="whatshot"
-    //           size={26}
-    //           color={color}
-    //         />
-    //       )
-    //     }}
-    //   />
-    //   <BottomTab.Screen
-    //     name="Trending"
-    //     component={Trending}
-    //     options={{
-    //       tabBarLabel: '趋势',
-    //       tabBarIcon: ({ focused, color, size }) => (
-    //         <Ionicons
-    //           name="md-trending-up"
-    //           size={26}
-    //           color={color}
-    //         />
-    //       )
-    //     }}
-    //   />
-    //   <BottomTab.Screen
-    //     name="Favorite"
-    //     component={Favorite}
-    //     options={{
-    //       tabBarLabel: '收藏',
-    //       tabBarIcon: ({ focused, color, size }) => (
-    //         <MaterialIcons 
-    //           name="favorite"
-    //           size={26}
-    //           color={color}
-    //         />
-    //       )
-    //     }}
-    //   />
-    //   <BottomTab.Screen
-    //     name="Mine"
-    //     component={Mine}
-    //     options={{
-    //       tabBarLabel: '我的',
-    //       tabBarIcon: ({ focused, color, size }) => (
-    //         <Entypo 
-    //           name="user"
-    //           size={26}
-    //           color={color}
-    //         />
-    //       )
-    //     }}
-    //   />
-    // </BottomTab.Navigator>
   )
 }
 

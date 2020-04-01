@@ -1,17 +1,20 @@
 import React, { useEffect, useRef } from 'react'
+import { connect } from 'react-redux'
 import { Text, View, StyleSheet } from 'react-native'
 import NavigationUtil from '../navigator/NavigationUtil';
 
 const Welcome = (props) => {
+  alert(JSON.stringify(props))
   const timer = useRef(null)
 
   useEffect(() => {
     timer.current = setTimeout(() => {
-      const { navigation } = props
+      const { navigation, goToMain } = props
+      goToMain()
       // navigation.navigate('Main')
-      NavigationUtil.resetToHomePage({
-        navigation: props.navigation
-      })
+      // NavigationUtil.resetToHomePage({
+      //   navigation: props.navigation
+      // })
     }, 2000)
     return () => {
       timer.current && clearTimeout(timer.current)
@@ -39,4 +42,16 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Welcome
+const mapStateToProps = state => ({
+  welcome: state.welcome.welcome
+})
+
+const mapDispatchToProps = dispatch => ({
+  goToMain: () => {
+    dispatch({
+      type: 'WELCOME_FINISH'
+    })
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Welcome)

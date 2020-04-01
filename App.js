@@ -7,8 +7,11 @@
  */
 
 import React from 'react';
+import { Provider } from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
+import store from './src/store'
+import AppWithNavigationState from './src/navigator/AppNavigator';
 import {
   SafeAreaView,
   StyleSheet,
@@ -25,92 +28,14 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import Welcome from './src/pages/Welcome';
-import Home from './src/pages/Home';
-import Detail from './src/pages/Detail';
-
-const InitStack = createStackNavigator()
-const MainStack = createStackNavigator()
-const Stack = createStackNavigator()
-
-const InitScreen = () => {
-  return (
-    <InitStack.Navigator
-      initialRouteName="Welcome"
-    >
-      <InitStack.Screen
-        name="Welcome"
-        component={Welcome}
-        options={{
-          headerShown: false
-        }}
-      />
-    </InitStack.Navigator>
-  )
-}
-
-const MainScreen = () => {
-  return (
-    <MainStack.Navigator
-      initialRouteName="Home"
-    >
-      <MainStack.Screen
-        name="Home"
-        component={Home}
-        options={(route, navigation) => {
-          // alert(JSON.stringify(route))
-          return {
-            headerShown: false
-          }
-        }}
-      />
-      <MainStack.Screen
-        name="Detail"
-        component={Detail}
-      />
-    </MainStack.Navigator>
-  )
-}
 
 const App: () => React$Node = () => {
   return (
-    <>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Init"
-        >
-          <Stack.Screen
-            name="Init"
-            component={InitScreen}
-            options={{
-              headerShown: false
-            }}
-          />
-          <Stack.Screen
-            name="Main"
-            component={MainScreen}
-            options={{
-              headerShown: false
-            }}
-          />
-          {/* <Stack.Screen
-            name="Welcome"
-            component={Welcome}
-            options={{
-              headerShown: false
-            }}
-          />
-          <Stack.Screen
-            name="Home"
-            component={Home}
-          />
-          <Stack.Screen
-            name="Detail"
-            component={Detail}
-          /> */}
-        </Stack.Navigator>
-      </NavigationContainer>
-    </>
+    <Provider
+      store={store}
+    >
+      <AppWithNavigationState />
+    </Provider>
   );
 };
 
