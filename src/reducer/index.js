@@ -3,12 +3,14 @@ import { combineReducers } from 'redux'
 import { AppNavigator } from '../navigator/AppNavigator'
 import theme from './theme'
 import welcome from './welcome'
+import popular from './popular'
 
 // const navReducer = createNavigationReducer(AppNavigator)
 
 const appReducer = combineReducers({
   theme,
-  welcome
+  welcome,
+  popular
 })
 
 export default appReducer

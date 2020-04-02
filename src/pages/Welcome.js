@@ -4,7 +4,7 @@ import { Text, View, StyleSheet } from 'react-native'
 import NavigationUtil from '../navigator/NavigationUtil';
 
 const Welcome = (props) => {
-  alert(JSON.stringify(props))
+  // alert(JSON.stringify(props))
   const timer = useRef(null)
 
   useEffect(() => {

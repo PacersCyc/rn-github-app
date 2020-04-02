@@ -55,6 +55,7 @@ export default class DataStore {
         this.saveData(url, resData)
         resolve(resData)
       }).catch(error => {
+        console.log('error', error)
         reject(error)
       })
     })
@@ -70,11 +71,13 @@ export default class DataStore {
             this.fetchNetData(url).then(data => {
               resolve(this._wrapData(data))
             }).catch(e => {
+              console.log(e)
               reject(e)
             })
           }
         })
         .catch(error => {
+          console.log(error)
           this.fetchData(url).then(data => {
             resolve(this._wrapData(data))
           }).catch(err => {
