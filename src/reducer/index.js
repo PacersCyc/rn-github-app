@@ -4,13 +4,15 @@ import { AppNavigator } from '../navigator/AppNavigator'
 import theme from './theme'
 import welcome from './welcome'
 import popular from './popular'
+import trending from './trending'
 
 // const navReducer = createNavigationReducer(AppNavigator)
 
 const appReducer = combineReducers({
   theme,
   welcome,
-  popular
+  popular,
+  trending
 })
 
 export default appReducer

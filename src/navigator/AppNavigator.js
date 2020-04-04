@@ -48,6 +48,9 @@ const MainScreen = () => {
       <MainStack.Screen
         name="Detail"
         component={Detail}
+        options={{
+          headerShown: false
+        }}
       />
     </MainStack.Navigator>
   )

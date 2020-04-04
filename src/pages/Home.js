@@ -18,10 +18,17 @@ const Home = (props) => {
   // alert(JSON.stringify(props))
 
   const onBackPress = () => {
-    alert('back---' + JSON.stringify(props.navigation))
-    props.navigation.dispatch(
-      CommonActions.goBack()
-    )
+    const { navigation, route } = props
+    const { history, index, routes } = route.state
+    alert('back---' + JSON.stringify(route.state))
+    // alert(JSON.stringify(history) + '  ' + index)
+    // if (!history || !history.length) {
+    //   return false
+    // }
+    navigation.goBack()
+    // props.navigation.dispatch(
+    //   CommonActions.goBack()
+    // )
     return true
   }
 

@@ -1,15 +1,17 @@
 import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import { Text, View, StyleSheet, FlatList, RefreshControl, ActivityIndicator } from 'react-native'
+import DeviceInfo from 'react-native-device-info'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import Toast from 'react-native-easy-toast'
 import NavigationUtil from '../navigator/NavigationUtil';
 import actions from '../action'
 import PopularItem from '../common/PopularItem';
+import NavigationBar from '../common/NavigationBar'
 
 const URL = 'https://api.github.com/search/repositories?q='
 const QUERY_STR = '&sort=stars'
-const THEME_COLOR = 'red'
+const THEME_COLOR = '#678'
 const PAGE_SIZE = 10
 
 const tabNames = ['JavaScript', 'TypeScript', 'React', 'React Native', 'Nodejs', 'Go']
@@ -21,9 +23,19 @@ const Popular = () => {
     <View
       style={{
         flex: 1,
-        marginTop: 30
+        marginTop: DeviceInfo.getSystemName() !== 'Android' ? 30 : 0
       }}
     >
+      <NavigationBar
+        title="最热"
+        style={{
+          backgroundColor: THEME_COLOR
+        }}
+        statusBar={{
+          backgroundColor: THEME_COLOR,
+          barStyle: 'light-content',
+        }}
+      />
       <TopTab.Navigator
         tabBarOptions={{
           tabStyle: styles.tabStyle,
@@ -116,7 +128,18 @@ const PopularContent = (props) => {
       <FlatList
         data={store.projectModes}
         //renderItem={ListItem}
-        renderItem={props => <PopularItem item={props.item} onSelect={() => { }} />}
+        renderItem={p =>
+          <PopularItem 
+            item={p.item} 
+            onSelect={() => {
+              console.log('跳转', p.item)
+              NavigationUtil.goPage({
+                navigation: props.navigation,
+                projectModel: p.item
+              }, 'Detail')
+            }} 
+          />
+        }
         keyExtractor={item => '' + item.id}
         refreshControl={
           <RefreshControl
@@ -192,7 +215,7 @@ const styles = StyleSheet.create({
     margin: 10
   },
   tabStyle: {
-    minWidth: 50,
+    // minWidth: 50,
   },
   indicatorStyle: {
     height: 2,
@@ -202,7 +225,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 6,
     marginBottom: 6,
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
+    color: '#fff'
   },
   indicatorContainer: {
     alignItems: 'center'

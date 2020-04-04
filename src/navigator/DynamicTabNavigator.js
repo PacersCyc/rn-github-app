@@ -105,6 +105,7 @@ const DynamicTabNavigator = (props) => {
       //   alert(JSON.stringify(route))
       //   return {}
       // }}
+      backBehavior="history"
       tabBar={(bottomProps) => (
         <TabBarComponent {...bottomProps} theme={props.theme} />
       )}
