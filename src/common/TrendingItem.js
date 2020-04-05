@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import HTMLView from 'react-native-htmlview'
@@ -15,6 +15,10 @@ const TrendingItem = (props) => {
     setIsFavorite(isFavorite)
     onFavorite(projectModel.item, isFavorite)
   }
+
+  useEffect(() => {
+    setIsFavorite(projectModel.isFavorite)
+  }, [projectModel.isFavorite])
 
   if (!item) {
     return null

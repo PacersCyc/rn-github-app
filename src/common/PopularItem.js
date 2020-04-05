@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import FavoriteButtom from './FavoriteButton'
@@ -14,6 +14,10 @@ const PopularItem = (props) => {
     setIsFavorite(isFavorite)
     onFavorite(projectModel.item, isFavorite)
   }
+
+  useEffect(() => {
+    setIsFavorite(projectModel.isFavorite)
+  }, [projectModel.isFavorite])
 
   if (!item || !item.owner) {
     return null

@@ -13,6 +13,7 @@ import { FLAG_STORE } from '../expand/dao/DataStore';
 import { favoriteHandle } from '../util'
 import EventBus from 'react-native-event-bus';
 import eventTypes from '../eventTypes'
+import FavoriteButton from '../common/FavoriteButton'
 
 const URL = 'https://api.github.com/search/repositories?q='
 const QUERY_STR = '&sort=stars'

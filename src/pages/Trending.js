@@ -14,6 +14,8 @@ import TrendingDialog, { TimeSpans } from '../common/TrendingDialog'
 import FavoriteDao from '../expand/dao/FavoriteDao';
 import { FLAG_STORE } from '../expand/dao/DataStore';
 import { favoriteHandle } from '../util'
+import EventBus from 'react-native-event-bus';
+import eventTypes from '../eventTypes'
 
 const URL = 'https://github.com/trending/'
 const QUERY_STR = '?since=daily'
@@ -143,6 +145,9 @@ const TrendingContent = (props) => {
   // console.log('TTT', props)
   const toastRef = useRef(null)
   let canLoadMore = false
+  let isFavoriteChanged = false
+
+  const [a, setA] = useState(false)
 
   const { trending, route } = props
   let store = trending[route.name]
@@ -167,8 +172,8 @@ const TrendingContent = (props) => {
     )
   }
 
-  const loadData = (loadMore) => {
-    const { route, onRefreshTrending, onLoadMoreTrending, timeSpan } = props
+  const loadData = (loadMore, refreshFavorite) => {
+    const { route, onRefreshTrending, onLoadMoreTrending, onFlushTrendingFavorite, timeSpan } = props
     const storeName = route.name
     const url = URL + (storeName === 'All' ? '' : storeName) + '?' + timeSpan.searchText
     console.log(url)
@@ -178,15 +183,49 @@ const TrendingContent = (props) => {
       onLoadMoreTrending(storeName, ++store.pageIndex, PAGE_SIZE, store.items, favoriteDao, () => {
         toastRef.current.show('没有更多了')
       })
+    } else if(refreshFavorite) {
+      console.log('items', store.items)
+      onFlushTrendingFavorite(storeName, store.pageIndex, PAGE_SIZE, store.items, favoriteDao)
     } else {
       console.log('refresh')
       onRefreshTrending(storeName, url, PAGE_SIZE, favoriteDao)
     }
   }
 
+  const favoriteChangeHandle = () => {
+    console.log('favorite change!!!')
+    console.log('收藏后props', props)
+    console.log('store', store)
+    isFavoriteChanged = true
+  }
+
+  const bottomTabChangeHandle = (data) => {
+    console.log('tab changed!!!', data)
+    console.log('跳转后props', props)
+    console.log('store', store)
+    console.log(isFavoriteChanged)
+    if (data.index === 1 && isFavoriteChanged) {
+      console.log(33333)
+      setA(s => !s)
+      // loadData(null, true)
+    }
+  }
+
   useEffect(() => {
     loadData()
+    EventBus.getInstance().addListener(eventTypes.FAVORITE_CHANGED_TRENDING, favoriteChangeHandle)
+    EventBus.getInstance().addListener(eventTypes.BOTTOM_TAB_SELECT, bottomTabChangeHandle)
+
+    return () => {
+      EventBus.getInstance().removeListener(eventTypes.FAVORITE_CHANGED_TRENDING, favoriteChangeHandle)
+      EventBus.getInstance().removeListener(eventTypes.BOTTOM_TAB_SELECT, bottomTabChangeHandle)
+    }
   }, [])
+
+  useEffect(() => {
+    console.log('a变了', a)
+    loadData(null, true)
+  }, [a])
 
   return (
     <View style={styles.container}>
@@ -256,6 +295,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onLoadMoreTrending: (storeName, pageIndex, pageSize, dataArray, favoriteDao, callback) => {
     dispatch(actions.onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray, favoriteDao, callback))
+  },
+  onFlushTrendingFavorite: (storeName, pageIndex, pageSize, items, favoriteDao) => {
+    dispatch(actions.onFlushTrendingFavorite(storeName, pageIndex, pageSize, items, favoriteDao))
   }
 })
 
