@@ -1,34 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import FavoriteButtom from './FavoriteButton'
 
 const PopularItem = (props) => {
-  const { item, onSelect } = props
+  // console.log('PopularItem', props)
+  const { projectModel, onSelect, onFavorite } = props
+  const { item } = projectModel
+
+  const [ isFavorite, setIsFavorite ] = useState(projectModel.isFavorite)
+
+  const changeFavorite = (isFavorite) => {
+    setIsFavorite(isFavorite)
+    onFavorite(projectModel.item, isFavorite)
+  }
+
   if (!item || !item.owner) {
     return null
   }
 
-  let FavoriteButton = (
-    <TouchableOpacity
-      style={{
-        padding: 6
-      }}
-      onPress={() => { }}
-      underLayColor="transparent"
-    >
-      <FontAwesome
-        name="star-o"
-        size={26}
-        style={{
-          color: 'red'
-        }}
-      />
-    </TouchableOpacity>
-  )
-
   return (
     <TouchableOpacity
-      onPress={onSelect}
+      onPress={() => {
+        onSelect(changeFavorite)
+      }}
     >
       <View style={styles.cell_container}>
         <Text style={styles.title}>
@@ -59,21 +54,14 @@ const PopularItem = (props) => {
             <Text>Stars: </Text>
             <Text>{item.stargazers_count}</Text>
           </View>
-          <TouchableOpacity
-            style={{
-              padding: 6
+          <FavoriteButtom
+            isFavorite={isFavorite}
+            // projectModel={projectModel}
+            onFavorite={(iF) => {
+              changeFavorite(iF)
+              // onFavorite(it, iF)
             }}
-            onPress={() => { }}
-            underLayColor="transparent"
-          >
-            <FontAwesome
-              name="star-o"
-              size={26}
-              style={{
-                color: 'red'
-              }}
-            />
-          </TouchableOpacity>
+          />
         </View>
       </View>
     </TouchableOpacity>

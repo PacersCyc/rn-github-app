@@ -1,36 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import HTMLView from 'react-native-htmlview'
+import FavoriteButton from './FavoriteButton'
 
 const TrendingItem = (props) => {
-  const { item, onSelect } = props
+  // console.log('TrendingItem', props)
+  const { projectModel, onSelect, onFavorite } = props
+  const { item } = projectModel
+
+  const [ isFavorite, setIsFavorite ] = useState(projectModel.isFavorite)
+
+  const changeFavorite = (isFavorite) => {
+    setIsFavorite(isFavorite)
+    onFavorite(projectModel.item, isFavorite)
+  }
+
   if (!item) {
     return null
   }
   let description = `<p>${item.description}</p>`
 
-  let FavoriteButton = (
-    <TouchableOpacity
-      style={{
-        padding: 6
-      }}
-      onPress={() => { }}
-      underLayColor="transparent"
-    >
-      <FontAwesome
-        name="star-o"
-        size={26}
-        style={{
-          color: 'red'
-        }}
-      />
-    </TouchableOpacity>
-  )
-
   return (
     <TouchableOpacity
-      onPress={onSelect}
+      onPress={() => {
+        onSelect(changeFavorite)
+      }}
     >
       <View style={styles.cell_container}>
         <Text style={styles.title}>
@@ -75,21 +70,14 @@ const TrendingItem = (props) => {
             <Text>Fork: </Text>
             <Text>{item.forkCount}</Text>
           </View>
-          {/* <TouchableOpacity
-            style={{
-              padding: 6
+          <FavoriteButton
+            isFavorite={isFavorite}
+            projectModel={projectModel}
+            onFavorite={(iF) => {
+              changeFavorite(iF)
+              // onFavorite(it, iF)
             }}
-            onPress={() => { }}
-            underLayColor="transparent"
-          >
-            <FontAwesome
-              name="star-o"
-              size={26}
-              style={{
-                color: 'red'
-              }}
-            />
-          </TouchableOpacity> */}
+          />
         </View>
       </View>
     </TouchableOpacity>

@@ -11,6 +11,9 @@ import PopularItem from '../common/PopularItem';
 import NavigationBar from '../common/NavigationBar'
 import TrendingItem from '../common/TrendingItem';
 import TrendingDialog, { TimeSpans } from '../common/TrendingDialog'
+import FavoriteDao from '../expand/dao/FavoriteDao';
+import { FLAG_STORE } from '../expand/dao/DataStore';
+import { favoriteHandle } from '../util'
 
 const URL = 'https://github.com/trending/'
 const QUERY_STR = '?since=daily'
@@ -20,6 +23,7 @@ const PAGE_SIZE = 10
 const tabNames = ['All', 'C++', 'C#', 'PHP', 'JavaScript', 'TypeScript']
 
 const TopTab = createMaterialTopTabNavigator()
+const favoriteDao = new FavoriteDao(FLAG_STORE.flag_trending)
 
 const TitleViewComp = (props) => {
   const { timeSpan, onPress } = props
@@ -171,12 +175,12 @@ const TrendingContent = (props) => {
     if (loadMore) {
       console.log('loadMore')
       console.log('store', store)
-      onLoadMoreTrending(storeName, ++store.pageIndex, PAGE_SIZE, store.items, () => {
+      onLoadMoreTrending(storeName, ++store.pageIndex, PAGE_SIZE, store.items, favoriteDao, () => {
         toastRef.current.show('没有更多了')
       })
     } else {
       console.log('refresh')
-      onRefreshTrending(storeName, url, PAGE_SIZE)
+      onRefreshTrending(storeName, url, PAGE_SIZE, favoriteDao)
     }
   }
 
@@ -191,15 +195,21 @@ const TrendingContent = (props) => {
         renderItem={
           p => 
           <TrendingItem 
-            item={p.item} 
-            onSelect={() => {
+            projectModel={p.item} 
+            onSelect={(callback) => {
               props.navigation.navigate('Detail', {
-                projectModel: p.item
+                projectModel: p.item,
+                flag: FLAG_STORE.flag_trending,
+                callback
               })
-            }} 
+            }}
+            onFavorite={(item, isFavorite) => {
+              p.item.isFavorite = isFavorite
+              favoriteHandle(favoriteDao, item, isFavorite, FLAG_STORE.flag_trending)
+            }}
           />
         }
-        keyExtractor={item => '' + (item.id || item.fullName)}
+        keyExtractor={item => '' + (item.item.id || item.item.fullName)}
         refreshControl={
           <RefreshControl
             title="Loading"
@@ -241,11 +251,11 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  onRefreshTrending: (storeName, url, pageSize) => {
-    dispatch(actions.onRefreshTrending(storeName, url, pageSize))
+  onRefreshTrending: (storeName, url, pageSize, favoriteDao) => {
+    dispatch(actions.onRefreshTrending(storeName, url, pageSize, favoriteDao))
   },
-  onLoadMoreTrending: (storeName, pageIndex, pageSize, dataArray, callback) => {
-    dispatch(actions.onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray, callback))
+  onLoadMoreTrending: (storeName, pageIndex, pageSize, dataArray, favoriteDao, callback) => {
+    dispatch(actions.onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray, favoriteDao, callback))
   }
 })
 

@@ -5,10 +5,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createSwitchNavigator } from '@react-navigation/compat'
 import { NavigationContainer } from '@react-navigation/native'
 import { connect } from 'react-redux'
+import EventBus from 'react-native-event-bus'
 // import { createReduxContainer, createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers'
 import Welcome from '../pages/Welcome'
 import Home from '../pages/Home'
 import Detail from '../pages/Detail'
+import eventTypes from '../eventTypes'
 
 const InitStack = createStackNavigator()
 const MainStack = createStackNavigator()
@@ -58,7 +60,15 @@ const MainScreen = () => {
 
 export const AppNavigator = (props) => {
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      onStateChange={(state) => {
+        console.log('stateChange', state)
+        let tabIndex = state.routes[0].state.index
+        EventBus.getInstance().fireEvent(eventTypes.BOTTOM_TAB_SELECT, {
+          index: tabIndex
+        })
+      }}
+    >
       {
         props.welcome ? <InitScreen /> : <MainScreen />
       }

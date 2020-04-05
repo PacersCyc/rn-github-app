@@ -1,23 +1,8 @@
 import types from '../types'
 import DataStore, { FLAG_STORE } from '../../expand/dao/DataStore';
-import { handleData } from '../ActionUtil'
+import { handleData, _projectModels } from '../ActionUtil'
 
-// function handleData(dispatch, storeName, data, pageSize) {
-//   let fixItems = []
-//   if (data && data.data && data.data.items) {
-//     fixItems = data.data.items
-//   }
-
-//   dispatch({
-//     type: types.POPULAR_REFRESH_SUCCESS,
-//     items: fixItems,
-//     projectModes: pageSize > fixItems.length ? fixItems : fixItems.slice(0, pageSize),
-//     storeName,
-//     pageIndex: 1
-//   })
-// }
-
-export function onRefreshPopular(storeName, url, pageSize) {
+export function onRefreshPopular(storeName, url, pageSize, favoriteDao) {
   return dispatch => {
     dispatch({
       type: types.POPULAR_REFRESH,
@@ -27,7 +12,7 @@ export function onRefreshPopular(storeName, url, pageSize) {
     dataStore.fetchData(url, FLAG_STORE.flag_popular)
       .then(data => {
         console.log(data)
-        handleData(types.POPULAR_REFRESH_SUCCESS, dispatch, storeName, data, pageSize)
+        handleData(types.POPULAR_REFRESH_SUCCESS, dispatch, storeName, data, pageSize, favoriteDao)
       })
       .catch(err => {
         console.log(err)
@@ -40,10 +25,10 @@ export function onRefreshPopular(storeName, url, pageSize) {
   }
 }
 
-export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = [], callback) {
+export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = [], favoriteDao, callback) {
   return dispatch => {
     setTimeout(() => {
-      if ((pageIndex - 1)*pageSize >= dataArray.length) {
+      if ((pageIndex - 1) * pageSize >= dataArray.length) {
         if (typeof callback === 'function') {
           callback('no more')
         }
@@ -52,17 +37,44 @@ export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = []
           error: 'no more',
           storeName,
           pageIndex: --pageIndex,
-          projectModes: dataArray
+          // projectModes: dataArray
         })
       } else {
         let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex
-        dispatch({
-          type: types.POPULAR_LOAD_MORE_SUCCESS,
-          storeName,
-          pageIndex,
-          projectModes: dataArray.slice(0, max)
+
+        _projectModels(dataArray.slice(0, max), favoriteDao).then(projectModels => {
+          console.log('projectModels===', projectModels)
+          dispatch({
+            type: types.POPULAR_LOAD_MORE_SUCCESS,
+            storeName,
+            pageIndex,
+            projectModes: projectModels
+          })
         })
+        // dispatch({
+        //   type: types.POPULAR_LOAD_MORE_SUCCESS,
+        //   storeName,
+        //   pageIndex,
+        //   projectModes: dataArray.slice(0, max)
+        // })
       }
     }, 500)
+  }
+}
+
+export function onFlushPopularFavorite(storeName, pageIndex, pageSize, dataArray = [], favoriteDao) {
+  return dispatch => {
+    let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex
+
+    _projectModels(dataArray.slice(0, max), favoriteDao).then(projectModels => {
+      dispatch({
+        type: types.POPULAR_FAVORITE_FLUSH,
+        storeName,
+        pageIndex,
+        projectModes: projectModels
+      })
+    }).catch(err => {
+      console.log('onFlushPopularFavorite---', err)
+    })
   }
 }

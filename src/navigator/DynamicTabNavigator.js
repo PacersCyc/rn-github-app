@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
+import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator, BottomTabBar } from '@react-navigation/bottom-tabs'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -72,21 +73,7 @@ const Tabs = [
 ]
 
 const TabBarComponent = props => {
-  // let barTheme = useRef({
-  //   tintColor: props.activeTintColor,
-  //   updateTime: Date.now()
-  // })
-  // alert('tabbarProps---' + JSON.stringify(props))
-
-  // const { routes, index } = props.state
-  // if (routes[index].params) {
-  //   const { theme } = routes[index].params
-  //   if (theme && theme.updateTime > barTheme.current.updateTime) {
-  //     barTheme.current = theme
-  //   }
-  // }
-  // alert('barTheme===' + JSON.stringify(barTheme.current))
-
+  console.log('Tabbar', props)
   return (
     <BottomTabBar
       {...props}
@@ -105,13 +92,13 @@ const DynamicTabNavigator = (props) => {
       //   alert(JSON.stringify(route))
       //   return {}
       // }}
-      backBehavior="history"
+      // backBehavior="history"
       tabBar={(bottomProps) => (
         <TabBarComponent {...bottomProps} theme={props.theme} />
       )}
-    // tabBarOptions={{
-    //   activeTintColor: 'tomato'
-    // }}
+      // tabBarOptions={{
+      //   activeTintColor: 'tomato'
+      // }}
     >
       {
         Tabs.map(tab => (

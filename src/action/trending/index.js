@@ -1,8 +1,8 @@
 import types from '../types'
 import DataStore, { FLAG_STORE } from '../../expand/dao/DataStore';
-import { handleData } from '../ActionUtil'
+import { handleData, _projectModels } from '../ActionUtil'
 
-export function onRefreshTrending(storeName, url, pageSize) {
+export function onRefreshTrending(storeName, url, pageSize, favoriteDao) {
   return dispatch => {
     dispatch({
       type: types.TRENDING_REFRESH,
@@ -12,7 +12,7 @@ export function onRefreshTrending(storeName, url, pageSize) {
     dataStore.fetchData(url, FLAG_STORE.flag_trending)
       .then(data => {
         console.log(data)
-        handleData(types.TRENDING_REFRESH_SUCCESS, dispatch, storeName, data, pageSize)
+        handleData(types.TRENDING_REFRESH_SUCCESS, dispatch, storeName, data, pageSize, favoriteDao)
       })
       .catch(err => {
         console.log(err)
@@ -25,7 +25,7 @@ export function onRefreshTrending(storeName, url, pageSize) {
   }
 }
 
-export function onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray = [], callback) {
+export function onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray = [], favoriteDao, callback) {
   return dispatch => {
     setTimeout(() => {
       if ((pageIndex - 1)*pageSize >= dataArray.length) {
@@ -41,12 +41,21 @@ export function onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray = [
         })
       } else {
         let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex
-        dispatch({
-          type: types.TRENDING_LOAD_MORE_SUCCESS,
-          storeName,
-          pageIndex,
-          projectModes: dataArray.slice(0, max)
+        
+        _projectModels(dataArray.slice(0, max), favoriteDao).then(data => {
+          dispatch({
+            type: types.TRENDING_LOAD_MORE_SUCCESS,
+            storeName,
+            pageIndex,
+            projectModes: data
+          })
         })
+        // dispatch({
+        //   type: types.TRENDING_LOAD_MORE_SUCCESS,
+        //   storeName,
+        //   pageIndex,
+        //   projectModes: dataArray.slice(0, max)
+        // })
       }
     }, 500)
   }

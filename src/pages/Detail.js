@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import DeviceInfo from 'react-native-device-info'
 import NavigationBar from '../common/NavigationBar';
+import FavoriteDao from '../expand/dao/FavoriteDao';
 
 const URL = 'https://github.com/'
 const THEME_COLOR = '#678'
@@ -49,16 +50,22 @@ const ShareButton = props => {
 }
 
 const RightButtonComp = props => {
+  console.log('RightButton', props)
+  const { isFavorite, onPress } = props
+
   return (
     <View
       style={{
         flexDirection: 'row'
       }}
-      onPress={() => {}}
     >
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          onPress()
+        }}
+      >
         <FontAwesome 
-          name="star-o"
+          name={isFavorite ? "star" :"star-o"}
           size={20}
           style={{
             color: 'white',
@@ -77,8 +84,12 @@ const Detail = (props) => {
   console.log('Detail', props)
 
   const { navigation, route } = props
-  const { full_name, html_url, fullName } = route.params.projectModel
+  const { projectModel, flag, callback } = route.params
+  const { full_name, html_url, fullName, id } = projectModel.item
 
+  const favoriteDao = new FavoriteDao(flag)
+
+  const [ isFavorite, setIsFavorite ] = useState(projectModel.isFavorite)
   const [ canBack, setCanBack ] = useState(false)
   const [ url, setUrl ] = useState(html_url || (URL + fullName))
 
@@ -89,6 +100,19 @@ const Detail = (props) => {
   }, [url])
 
   const webviewRef = useRef(null)
+
+  const onFavoriteChange = () => {
+    setIsFavorite(!isFavorite)
+    typeof callback === 'function' && callback(!isFavorite)
+    // let key = fullName || id.toString()
+    // console.log('key', key)
+    // console.log(favoriteDao)
+    // if (!projectModel.isFavorite) {
+    //   favoriteDao.saveFavoriteItem(key, JSON.stringify(projectModel.item))
+    // } else {
+    //   favoriteDao.removeFavoriteItem(key)
+    // }
+  }
 
   const onBack = useCallback(() => {
     if (canBack) {
@@ -122,7 +146,12 @@ const Detail = (props) => {
         title={full_name || fullName}
         titleLayoutStyle={titleLayoutStyle}
         leftButton={<LeftBackButton onBack={onBack} />}
-        rightButton={<RightButtonComp />}
+        rightButton={
+          <RightButtonComp 
+            isFavorite={isFavorite}
+            onPress={onFavoriteChange}
+          />
+        }
         style={{
           backgroundColor: THEME_COLOR
         }}
