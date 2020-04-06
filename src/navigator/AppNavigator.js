@@ -1,15 +1,18 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createSwitchNavigator } from '@react-navigation/compat'
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, useBackButton } from '@react-navigation/native'
 import { connect } from 'react-redux'
 import EventBus from 'react-native-event-bus'
 // import { createReduxContainer, createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers'
 import Welcome from '../pages/Welcome'
 import Home from '../pages/Home'
 import Detail from '../pages/Detail'
+import About from '../pages/about/About'
+import AboutMe from '../pages/about/AboutMe'
+import WebviewPage from '../pages/WebviewPage'
 import eventTypes from '../eventTypes'
 
 const InitStack = createStackNavigator()
@@ -54,13 +57,39 @@ const MainScreen = () => {
           headerShown: false
         }}
       />
+      <MainStack.Screen 
+        name="About"
+        component={About}
+        options={{
+          headerShown: false
+        }}
+      />
+      <MainStack.Screen 
+        name="AboutMe"
+        component={AboutMe}
+        options={{
+          headerShown: false
+        }}
+      />
+      <MainStack.Screen 
+        name="WebviewPage"
+        component={WebviewPage}
+        options={{
+          headerShown: false
+        }}
+      />
     </MainStack.Navigator>
   )
 }
 
 export const AppNavigator = (props) => {
+  const navContainerRef = useRef(null)
+
+  useBackButton(navContainerRef.current)
+
   return (
     <NavigationContainer
+      ref={navContainerRef}
       onStateChange={(state) => {
         console.log('stateChange', state)
         let tabIndex = state.routes[0].state.index

@@ -5,12 +5,49 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import DeviceInfo from 'react-native-device-info'
 import NavigationBar from '../common/NavigationBar';
-import LeftBackButton from '../common/LeftBackButton'
-import ShareButton from '../common/ShareButton'
 import FavoriteDao from '../expand/dao/FavoriteDao';
 
 const URL = 'https://github.com/'
 const THEME_COLOR = '#678'
+
+const LeftBackButton = props => {
+  const { onBack } = props
+
+  return (
+    <TouchableOpacity
+      style={{
+        padding: 8,
+        paddingLeft: 12
+      }}
+      onPress={() => onBack()}
+    >
+      <Ionicons 
+        name="ios-arrow-back"
+        size={26}
+        style={{color: 'white'}}
+      />
+    </TouchableOpacity>
+  )
+}
+
+const ShareButton = props => {
+  return (
+    <TouchableOpacity
+      underlayColor="transparent"
+      onPress={props.onPress}
+    >
+      <Ionicons 
+        name="md-share"
+        size={20}
+        style={{
+          opacity: 0.9,
+          marginRight: 10,
+          color: 'white'
+        }}
+      />
+    </TouchableOpacity>
+  )
+}
 
 const RightButtonComp = props => {
   console.log('RightButton', props)
@@ -43,39 +80,16 @@ const RightButtonComp = props => {
   )
 }
 
-const Detail = (props) => {
-  console.log('Detail', props)
-
+// 简单的浏览器封装
+const WebviewPage = (props) => {
   const { navigation, route } = props
-  const { projectModel, flag, callback } = route.params
-  const { full_name, html_url, fullName, id } = projectModel.item
+  const { params } = route
 
-  const favoriteDao = new FavoriteDao(flag)
-
-  const [ isFavorite, setIsFavorite ] = useState(projectModel.isFavorite)
   const [ canBack, setCanBack ] = useState(false)
-  const [ url, setUrl ] = useState(html_url || (URL + fullName))
-
-  const titleLayoutStyle = useMemo(() => {
-    return url.length > 20 ? {
-      paddingRight: 30
-    } : null
-  }, [url])
+  const [ url, setUrl ] = useState(params.url)
+  const [ title, setTitle ] = useState(params.title)
 
   const webviewRef = useRef(null)
-
-  const onFavoriteChange = () => {
-    setIsFavorite(!isFavorite)
-    typeof callback === 'function' && callback(!isFavorite)
-    // let key = fullName || id.toString()
-    // console.log('key', key)
-    // console.log(favoriteDao)
-    // if (!projectModel.isFavorite) {
-    //   favoriteDao.saveFavoriteItem(key, JSON.stringify(projectModel.item))
-    // } else {
-    //   favoriteDao.removeFavoriteItem(key)
-    // }
-  }
 
   const onBack = useCallback(() => {
     if (canBack) {
@@ -106,15 +120,8 @@ const Detail = (props) => {
   return (
     <View style={styles.container}>
       <NavigationBar 
-        title={full_name || fullName}
-        titleLayoutStyle={titleLayoutStyle}
-        leftButton={<LeftBackButton onBack={onBack} />}
-        rightButton={
-          <RightButtonComp 
-            isFavorite={isFavorite}
-            onPress={onFavoriteChange}
-          />
-        }
+        title={title}
+        leftButton={<LeftBackButton onBack={() => onBackPress()} />}
         style={{
           backgroundColor: THEME_COLOR
         }}
@@ -138,4 +145,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Detail
+export default WebviewPage
