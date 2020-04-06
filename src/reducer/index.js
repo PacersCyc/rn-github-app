@@ -6,6 +6,7 @@ import welcome from './welcome'
 import popular from './popular'
 import trending from './trending'
 import favorite from './favorite'
+import language from './language'
 
 // const navReducer = createNavigationReducer(AppNavigator)
 
@@ -14,7 +15,8 @@ const appReducer = combineReducers({
   welcome,
   popular,
   trending,
-  favorite
+  favorite,
+  language
 })
 
 export default appReducer

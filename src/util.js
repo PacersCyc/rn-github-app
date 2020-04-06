@@ -36,3 +36,27 @@ export function isIphoneX() {
       (D_HEIGHT === X_WIDTH && D_WIDTH === X_HEIGHT))
   )
 }
+
+export function transferToDoubleArr(arr, n = 2) {
+  return arr.reduce(
+    (pre, cur, i) => {
+      let newCur = {
+        data: cur,
+        index: i
+      }
+      return !pre.length
+        ? [[newCur]]
+        : (pre[pre.length - 1].length === n ? pre.concat([[newCur]]) : pre.map(item => item.length < n ? item.concat(newCur) : item))
+    },
+    []
+  )
+}
+
+export function isArraysEqual(arr1, arr2) {
+  if (!(arr1 && arr2)) return false;
+  if (arr1.length !== arr2.length) return false;
+  for (let i = 0, l = arr1.length; i < l; i++) {
+    if (arr1[i] !== arr2[i]) return false;
+  }
+  return true;
+}

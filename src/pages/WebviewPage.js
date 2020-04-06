@@ -122,9 +122,10 @@ const WebviewPage = (props) => {
       <NavigationBar 
         title={title}
         leftButton={<LeftBackButton onBack={() => onBackPress()} />}
-        style={{
-          backgroundColor: THEME_COLOR
-        }}
+        // style={{
+        //   backgroundColor: THEME_COLOR
+        // }}
+        style={params.theme.styles.navBar}
       />
       <WebView 
         source={{

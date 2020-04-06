@@ -4,8 +4,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import FavoriteButtom from './FavoriteButton'
 
 const PopularItem = (props) => {
-  // console.log('PopularItem', props)
-  const { projectModel, onSelect, onFavorite } = props
+  console.log('PopularItem', props)
+  const { theme, projectModel, onSelect, onFavorite } = props
   const { item } = projectModel
 
   const [ isFavorite, setIsFavorite ] = useState(projectModel.isFavorite)
@@ -59,6 +59,7 @@ const PopularItem = (props) => {
             <Text>{item.stargazers_count}</Text>
           </View>
           <FavoriteButtom
+            theme={theme}
             isFavorite={isFavorite}
             // projectModel={projectModel}
             onFavorite={(iF) => {

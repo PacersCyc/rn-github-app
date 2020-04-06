@@ -47,7 +47,7 @@ const Detail = (props) => {
   console.log('Detail', props)
 
   const { navigation, route } = props
-  const { projectModel, flag, callback } = route.params
+  const { projectModel, flag, callback, theme } = route.params
   const { full_name, html_url, fullName, id } = projectModel.item
 
   const favoriteDao = new FavoriteDao(flag)
@@ -115,9 +115,7 @@ const Detail = (props) => {
             onPress={onFavoriteChange}
           />
         }
-        style={{
-          backgroundColor: THEME_COLOR
-        }}
+        style={theme.styles.navBar}
       />
       <WebView 
         source={{

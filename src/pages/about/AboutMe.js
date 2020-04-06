@@ -13,6 +13,7 @@ const THEME_COLOR = '#678'
 const AboutMe = props => {
   console.log('About', props)
   const { navigation, route } = props
+  const { theme } = route.params
 
   const toastRef = useRef(null)
 
@@ -27,7 +28,8 @@ const AboutMe = props => {
     if (item.url) {
       navigation.navigate('WebviewPage', {
         title: item.title,
-        url: item.url
+        url: item.url,
+        theme
       })
       return
     }
@@ -60,7 +62,7 @@ const AboutMe = props => {
         Icons={menu.Icons}
         icon={menu.icon}
         text={menu.name}
-        color={THEME_COLOR}
+        color={theme.themeColor}
       />
     )
   }
@@ -74,7 +76,7 @@ const AboutMe = props => {
         Icons={Ionicons}
         text={data.name}
         icon={data.icon}
-        color={THEME_COLOR}
+        color={theme.themeColor}
         expandableIcon={isExpanded ? 'ios-arrow-up' : 'ios-arrow-down'}
       />
     )
@@ -90,7 +92,7 @@ const AboutMe = props => {
             onClick(item)
           }}
           text={item.account ? `${item.title} : ${item.account}` : item.title}
-          color={THEME_COLOR}
+          color={theme.themeColor}
         />
         <View style={globalStyles.line} />
       </View>

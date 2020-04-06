@@ -77,7 +77,8 @@ const TabBarComponent = props => {
   return (
     <BottomTabBar
       {...props}
-      activeTintColor={props.theme || props.activeTintColor}
+      // activeTintColor={props.theme || props.activeTintColor}
+      activeTintColor={props.theme.themeColor}
     />
   )
 }

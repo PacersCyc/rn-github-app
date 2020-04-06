@@ -11,12 +11,15 @@ const THEME_COLOR = '#678'
 const AboutPage = props => {
   console.log('About', props)
   const { navigation, route } = props
+  const { theme } = route.params
 
   const [ data, setData ] = useState(config)
 
   const onClick = menu => {
     let routeName = ''
-    let params = {}
+    let params = {
+      theme
+    }
     switch(menu) {
       case MENUS.Tutorial:
         routeName = 'WebviewPage'
@@ -56,7 +59,7 @@ const AboutPage = props => {
         Icons={menu.Icons}
         icon={menu.icon}
         text={menu.name}
-        color={THEME_COLOR}
+        color={theme.themeColor}
       />
     )
   }

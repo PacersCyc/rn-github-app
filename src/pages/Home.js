@@ -1,21 +1,24 @@
 import React, { useEffect } from 'react'
 import { Text, View, StyleSheet, BackHandler } from 'react-native'
+import { connect } from 'react-redux'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { CommonActions } from '@react-navigation/core'
 // import { CommonActions } from '@react-navigation/routers'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Entypo from 'react-native-vector-icons/Entypo'
+import actions from '../action'
 import Popular from './Popular';
 import Trending from './Trending';
 import Favorite from './Favorite';
 import Mine from './Mine';
+import CustomTheme from '../common/CustomTheme'
 import DynamicTabNavigator from '../navigator/DynamicTabNavigator'
 
 const BottomTab = createBottomTabNavigator()
 
 const Home = (props) => {
-  // alert(JSON.stringify(props))
+  const { customThemeViewVisible, onShowCustomThemeView } = props
 
   const onBackPress = () => {
     const { navigation, route } = props
@@ -40,7 +43,16 @@ const Home = (props) => {
   }, [])
 
   return (
-    <DynamicTabNavigator />
+    <View style={{flex: 1}}>
+      <DynamicTabNavigator />
+      <CustomTheme 
+        visible={customThemeViewVisible}
+        {...props}
+        onClose={() => {
+          onShowCustomThemeView(false)
+        }}
+      />
+    </View>
   )
 }
 
@@ -58,4 +70,13 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Home
+const mapStateToProps = state => ({
+  customThemeViewVisible: state.theme.customThemeViewVisible
+})
+const mapDispatchToProps = dispatch => ({
+  onShowCustomThemeView: (show) => {
+    dispatch(actions.onShowCustomThemeView(show))
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

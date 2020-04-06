@@ -12,6 +12,8 @@ import Home from '../pages/Home'
 import Detail from '../pages/Detail'
 import About from '../pages/about/About'
 import AboutMe from '../pages/about/AboutMe'
+import CustomKey from '../pages/CustomKey'
+import SortKey from '../pages/SortKey'
 import WebviewPage from '../pages/WebviewPage'
 import eventTypes from '../eventTypes'
 
@@ -67,6 +69,20 @@ const MainScreen = () => {
       <MainStack.Screen 
         name="AboutMe"
         component={AboutMe}
+        options={{
+          headerShown: false
+        }}
+      />
+      <MainStack.Screen 
+        name="CustomKey"
+        component={CustomKey}
+        options={{
+          headerShown: false
+        }}
+      />
+      <MainStack.Screen 
+        name="SortKey"
+        component={SortKey}
         options={{
           headerShown: false
         }}

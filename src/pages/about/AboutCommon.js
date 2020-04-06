@@ -22,6 +22,7 @@ export const FLAG_ABOUT = {
 
 const AboutCommon = props => {
   const {
+    theme,
     contentView,
     updateConfig,
     params
@@ -50,7 +51,7 @@ const AboutCommon = props => {
 
   return (
     <ParallaxScrollView
-      backgroundColor={THEME_COLOR}
+      backgroundColor={theme.themeColor}
       contentBackgroundColor={globalStyles.backgroundColor}
       parallaxHeaderHeight={PARALLAX_HEADER_HEIGHT}
       stickyHeaderHeight={STICKY_HEADER_HEIGHT}
@@ -95,11 +96,13 @@ const AboutCommon = props => {
       renderFixedHeader={() => (
         <View key="fixed-header" style={styles.fixedSection}>
           <LeftBackButton 
+            // color={theme.themeColor}
             onBack={() => {
               props.navigation.goBack()
             }}
           />
           <ShareButton 
+            // color={theme.themeColor}
             onPress={() => {}}
           />
         </View>

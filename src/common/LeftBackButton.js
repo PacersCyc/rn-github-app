@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const LeftBackButton = props => {
-  const { onBack } = props
+  const { color = 'white', onBack } = props
 
   return (
     <TouchableOpacity
@@ -16,7 +16,7 @@ const LeftBackButton = props => {
       <Ionicons 
         name="ios-arrow-back"
         size={26}
-        style={{color: 'white'}}
+        style={{color}}
       />
     </TouchableOpacity>
   )

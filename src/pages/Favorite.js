@@ -24,7 +24,15 @@ const tabNames = ['最热', '趋势']
 
 const TopTab = createMaterialTopTabNavigator()
 
-const Favorite = () => {
+const Favorite = (props) => {
+  const { theme } = props
+
+  const genTabWrapper = (flag) => {
+    return p => {
+      return <FavoriteTab {...p} flag={flag} theme={theme} />
+    }
+  }
+
   return (
     <View
       style={{
@@ -33,12 +41,10 @@ const Favorite = () => {
       }}
     >
       <NavigationBar
-        title="最热"
-        style={{
-          backgroundColor: THEME_COLOR
-        }}
+        title="收藏"
+        style={theme.styles.navBar}
         statusBar={{
-          backgroundColor: THEME_COLOR,
+          backgroundColor: theme.themeColor,
           barStyle: 'light-content',
         }}
       />
@@ -47,7 +53,7 @@ const Favorite = () => {
           tabStyle: styles.tabStyle,
           upperCaseLabel: false,
           style: {
-            backgroundColor: '#678'
+            backgroundColor: theme.themeColor
           },
           indicatorStyle: styles.indicatorStyle,
           labelStyle: styles.labelStyle
@@ -74,17 +80,17 @@ const Favorite = () => {
   )
 }
 
-const genTabWrapper = (flag) => {
-  return p => {
-    return <FavoriteTab {...p} flag={flag} />
-  }
-}
+const mapFavoriteStateToProps = state => ({
+  theme: state.theme.theme
+})
+
 
 const FavoriteContent = (props) => {
+  console.log('FavoriteContent', props)
   const toastRef = useRef(null)
   let canLoadMore = false
 
-  const { favorite, route, flag } = props
+  const { theme, favorite, route, flag } = props
   let favoriteDao = new FavoriteDao(flag)
   let store = favorite[route.name]
   if (!store) {
@@ -138,6 +144,7 @@ const FavoriteContent = (props) => {
         renderItem={p =>
           <ShowItem 
             // item={p.item}
+            theme={theme}
             projectModel={p.item} 
             onSelect={(callback) => {
               console.log('跳转', p.item)
@@ -145,6 +152,7 @@ const FavoriteContent = (props) => {
                 navigation: props.navigation,
                 projectModel: p.item,
                 flag,
+                theme,
                 callback
               }, 'Detail')
             }}
@@ -241,4 +249,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Favorite
+export default connect(mapFavoriteStateToProps)(Favorite)

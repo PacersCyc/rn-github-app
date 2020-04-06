@@ -6,7 +6,7 @@ import FavoriteButton from './FavoriteButton'
 
 const TrendingItem = (props) => {
   // console.log('TrendingItem', props)
-  const { projectModel, onSelect, onFavorite } = props
+  const { theme, projectModel, onSelect, onFavorite } = props
   const { item } = projectModel
 
   const [ isFavorite, setIsFavorite ] = useState(projectModel.isFavorite)
@@ -75,6 +75,7 @@ const TrendingItem = (props) => {
             <Text>{item.forkCount}</Text>
           </View>
           <FavoriteButton
+            theme={theme}
             isFavorite={isFavorite}
             projectModel={projectModel}
             onFavorite={(iF) => {

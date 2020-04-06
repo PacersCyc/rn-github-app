@@ -3,12 +3,12 @@ import { connect } from 'react-redux'
 import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import Feather from 'react-native-vector-icons/Feather'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import actions from '../action'
 import NavigationBar from '../common/NavigationBar'
 import SettingItem from '../common/SettingItem'
 import { MENUS } from '../menu'
 import globalStyles from '../res/styles/globalStyles'
-
-const THEME_COLOR = '#678'
+import { FLAG_LANGUAGE } from '../expand/dao/LanguageDao';
 
 const RightButton = () => {
   return (
@@ -59,12 +59,14 @@ const LeftButton = props => {
 }
 
 const Mine = (props) => {
-  const { navigation } = props
+  const { navigation, theme, onShowCustomThemeView } = props
 
   const onClick = menu => {
     console.log('menu', menu.name)
     let routeName = ''
-    let params = {}
+    let params = {
+      theme
+    }
     switch (menu) {
       case MENUS.Tutorial:
         routeName = 'WebviewPage'
@@ -76,6 +78,24 @@ const Mine = (props) => {
         break;
       case MENUS.About_Author:
         routeName = 'AboutMe'
+        break;
+      case MENUS.Custom_Key:
+      case MENUS.Remove_Key:
+      case MENUS.Custom_Language:
+        routeName = 'CustomKey'
+        params.isRemoveKey = menu === MENUS.Remove_Key;
+        params.flag = (menu !== MENUS.Custom_Language) ? FLAG_LANGUAGE.flag_key : FLAG_LANGUAGE.flag_language;
+        break;
+      case MENUS.Sort_Key:
+        routeName = 'SortKey'
+        params.flag = FLAG_LANGUAGE.flag_key
+        break;
+      case MENUS.Sort_Language:
+        routeName = 'SortKey'
+        params.flag = FLAG_LANGUAGE.flag_language
+        break;
+      case MENUS.Custom_Theme:
+        onShowCustomThemeView(true)
         break;
       default:
         break;
@@ -91,6 +111,7 @@ const Mine = (props) => {
         Icons={menu.Icons}
         icon={menu.icon}
         text={menu.name}
+        color={theme.themeColor}
         onPress={() => { onClick(menu) }}
       />
     )
@@ -101,12 +122,10 @@ const Mine = (props) => {
       <NavigationBar
         title="我的"
         statusBar={{
-          backgroundColor: THEME_COLOR,
+          backgroundColor: theme.themeColor,
           barStyle: 'light-content'
         }}
-        style={{
-          backgroundColor: THEME_COLOR
-        }}
+        style={theme.styles.navBar}
         rightButton={<RightButton />}
         leftButton={<LeftButton callback={() => { }} />}
       />
@@ -123,7 +142,7 @@ const Mine = (props) => {
               size={40}
               style={{
                 marginRight: 10,
-                color: THEME_COLOR
+                color: theme.themeColor
               }}
             />
             <Text>Github Popular</Text>
@@ -134,7 +153,7 @@ const Mine = (props) => {
             style={{
               marginRight: 10,
               alignSelf: 'center',
-              color: THEME_COLOR
+              color: theme.themeColor
             }}
           />
         </TouchableOpacity>
@@ -165,6 +184,15 @@ const Mine = (props) => {
   )
 }
 
+const mapStateToProps = state => ({
+  theme: state.theme.theme
+})
+const mapDispatchToProps = dispatch => ({
+  onShowCustomThemeView: (show) => {
+    dispatch(actions.onShowCustomThemeView(show))
+  }
+})
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -191,4 +219,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect()(Mine)
+export default connect(mapStateToProps, mapDispatchToProps)(Mine)

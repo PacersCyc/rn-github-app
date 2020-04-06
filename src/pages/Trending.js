@@ -16,10 +16,10 @@ import { FLAG_STORE } from '../expand/dao/DataStore';
 import { favoriteHandle } from '../util'
 import EventBus from 'react-native-event-bus';
 import eventTypes from '../eventTypes'
+import { FLAG_LANGUAGE } from '../expand/dao/LanguageDao';
 
 const URL = 'https://github.com/trending/'
 const QUERY_STR = '?since=daily'
-const THEME_COLOR = '#678'
 const PAGE_SIZE = 10
 
 const tabNames = ['All', 'C++', 'C#', 'PHP', 'JavaScript', 'TypeScript']
@@ -52,25 +52,31 @@ const TitleViewComp = (props) => {
         >
           趋势 {timeSpan.showText}
         </Text>
-        <MaterialIcons 
+        <MaterialIcons
           name="arrow-drop-down"
           size={22}
-          style={{color: 'white'}}
+          style={{ color: 'white' }}
         />
       </View>
     </TouchableOpacity>
   )
 }
 
-const Trending = () => {
-  const [ visible, setVisible ] = useState(false)
-  const [ timeSpan, setTimeSpan ] = useState(TimeSpans[0])
+const Trending = (props) => {
+  const { theme, keys, onLoadLanguage } = props
+
+  const [visible, setVisible] = useState(false)
+  const [timeSpan, setTimeSpan] = useState(TimeSpans[0])
 
   const genTrendingTab = useCallback((props) => {
     return (
-      <TrendingTab {...props} timeSpan={timeSpan} />
+      <TrendingTab {...props} timeSpan={timeSpan} theme={theme} />
     )
   }, [timeSpan])
+
+  useEffect(() => {
+    onLoadLanguage(FLAG_LANGUAGE.flag_language)
+  }, [])
 
   return (
     <View
@@ -79,52 +85,53 @@ const Trending = () => {
         marginTop: DeviceInfo.getSystemName() !== 'Android' ? 30 : 0
       }}
     >
-      <NavigationBar 
+      <NavigationBar
         // title="趋势"
         titleView={
-          <TitleViewComp 
+          <TitleViewComp
             timeSpan={timeSpan}
             onPress={() => {
               setVisible(true)
             }}
           />
         }
-        style={{
-          backgroundColor: THEME_COLOR
-        }}
+        style={theme.styles.navBar}
         statusBar={{
-          backgroundColor: THEME_COLOR,
+          backgroundColor: theme.themeColor,
           barStyle: 'light-content',
         }}
       />
-      <TopTab.Navigator
-        tabBarOptions={{
-          tabStyle: styles.tabStyle,
-          upperCaseLabel: false,
-          scrollEnabled: true,
-          style: {
-            backgroundColor: '#678'
-          },
-          indicatorStyle: styles.indicatorStyle,
-          labelStyle: styles.labelStyle
-        }}
-      >
-        {
-          tabNames.map((tab, index) => (
-            <TopTab.Screen
-              key={tab}
-              name={tab}
-              timeSpan={timeSpan}
-              // component={ p => <TrendingTab {...p} timeSpan={timeSpan}/>}
-              component={genTrendingTab}
-              options={{
-                title: tab
-              }}
-            />
-          ))
-        }
-      </TopTab.Navigator>
-      <TrendingDialog 
+      {
+        keys.length > 0 && (
+          <TopTab.Navigator
+            lazy={true}
+            tabBarOptions={{
+              tabStyle: styles.tabStyle,
+              upperCaseLabel: false,
+              scrollEnabled: true,
+              style: {
+                backgroundColor: theme.themeColor
+              },
+              indicatorStyle: styles.indicatorStyle,
+              labelStyle: styles.labelStyle
+            }}
+          >
+            {
+              keys.filter(item => item.checked).map(tab => (
+                <TopTab.Screen 
+                  key={tab.name}
+                  name={tab.name}
+                  component={genTrendingTab}
+                  options={{
+                    title: tab.name
+                  }}
+                />
+              ))
+            }
+          </TopTab.Navigator>
+        )
+      }
+      <TrendingDialog
         visible={visible}
         onShow={() => {
           setVisible(true)
@@ -141,6 +148,20 @@ const Trending = () => {
   )
 }
 
+const mapTrendingStateToProps = state => ({
+  keys: state.language.languages,
+  theme: state.theme.theme
+})
+
+const mapTrendingDispatchToProps = dispatch => ({
+  onLoadLanguage: (flag) => {
+    dispatch(actions.onLoadLanguage(flag))
+  }
+})
+
+
+
+
 const TrendingContent = (props) => {
   // console.log('TTT', props)
   const toastRef = useRef(null)
@@ -149,7 +170,7 @@ const TrendingContent = (props) => {
 
   const [a, setA] = useState(false)
 
-  const { trending, route } = props
+  const { trending, route, theme } = props
   let store = trending[route.name]
   if (!store) {
     store = {
@@ -183,7 +204,7 @@ const TrendingContent = (props) => {
       onLoadMoreTrending(storeName, ++store.pageIndex, PAGE_SIZE, store.items, favoriteDao, () => {
         toastRef.current.show('没有更多了')
       })
-    } else if(refreshFavorite) {
+    } else if (refreshFavorite) {
       console.log('items', store.items)
       onFlushTrendingFavorite(storeName, store.pageIndex, PAGE_SIZE, store.items, favoriteDao)
     } else {
@@ -232,29 +253,31 @@ const TrendingContent = (props) => {
       <FlatList
         data={store.projectModes}
         renderItem={
-          p => 
-          <TrendingItem 
-            projectModel={p.item} 
-            onSelect={(callback) => {
-              props.navigation.navigate('Detail', {
-                projectModel: p.item,
-                flag: FLAG_STORE.flag_trending,
-                callback
-              })
-            }}
-            onFavorite={(item, isFavorite) => {
-              p.item.isFavorite = isFavorite
-              favoriteHandle(favoriteDao, item, isFavorite, FLAG_STORE.flag_trending)
-            }}
-          />
+          p =>
+            <TrendingItem
+              theme={theme}
+              projectModel={p.item}
+              onSelect={(callback) => {
+                props.navigation.navigate('Detail', {
+                  projectModel: p.item,
+                  flag: FLAG_STORE.flag_trending,
+                  theme,
+                  callback
+                })
+              }}
+              onFavorite={(item, isFavorite) => {
+                p.item.isFavorite = isFavorite
+                favoriteHandle(favoriteDao, item, isFavorite, FLAG_STORE.flag_trending)
+              }}
+            />
         }
         keyExtractor={item => '' + (item.item.id || item.item.fullName)}
         refreshControl={
           <RefreshControl
             title="Loading"
-            titleColor={THEME_COLOR}
-            tintColor={THEME_COLOR}
-            colors={[THEME_COLOR]}
+            titleColor={theme.themeColor}
+            tintColor={theme.themeColor}
+            colors={[theme.themeColor]}
             refreshing={store.isLoading}
             onRefresh={() => {
               console.log('下拉刷新')
@@ -335,4 +358,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Trending
+export default connect(mapTrendingStateToProps, mapTrendingDispatchToProps)(Trending)

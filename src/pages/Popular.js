@@ -14,10 +14,11 @@ import { favoriteHandle } from '../util'
 import EventBus from 'react-native-event-bus';
 import eventTypes from '../eventTypes'
 import FavoriteButton from '../common/FavoriteButton'
+import { FLAG_LANGUAGE } from '../expand/dao/LanguageDao';
 
 const URL = 'https://api.github.com/search/repositories?q='
 const QUERY_STR = '&sort=stars'
-const THEME_COLOR = '#678'
+// const THEME_COLOR = '#678'
 const PAGE_SIZE = 10
 
 const tabNames = ['JavaScript', 'TypeScript', 'React', 'React Native', 'Nodejs', 'Go']
@@ -25,10 +26,16 @@ const tabNames = ['JavaScript', 'TypeScript', 'React', 'React Native', 'Nodejs',
 const TopTab = createMaterialTopTabNavigator()
 const favoriteDao = new FavoriteDao(FLAG_STORE.flag_popular)
 
-// const genPopularTab = p => <PopularTab {...p} />
-
 const Popular = (props) => {
   console.log('Popular', props)
+  const { keys, theme, onLoadLanguage } = props
+
+  const genPopularTab = p => <PopularTab {...p} theme={theme} />
+
+  useEffect(() => {
+    onLoadLanguage(FLAG_LANGUAGE.flag_key)
+  }, [])
+
   return (
     <View
       style={{
@@ -38,53 +45,69 @@ const Popular = (props) => {
     >
       <NavigationBar
         title="最热"
-        style={{
-          backgroundColor: THEME_COLOR
-        }}
+        style={theme.styles.navBar}
         statusBar={{
-          backgroundColor: THEME_COLOR,
+          backgroundColor: theme.themeColor,
           barStyle: 'light-content',
         }}
       />
-      <TopTab.Navigator
-        tabBarOptions={{
-          tabStyle: styles.tabStyle,
-          upperCaseLabel: false,
-          scrollEnabled: true,
-          style: {
-            backgroundColor: '#678'
-          },
-          indicatorStyle: styles.indicatorStyle,
-          labelStyle: styles.labelStyle
-        }}
-      >
-        {
-          tabNames.map((tab, index) => (
-            <TopTab.Screen
-              key={tab}
-              name={tab}
-              component={PopularTab}
-              // component={genPopularTab}
-              options={{
-                title: tab
-              }}
-            />
-          ))
-        }
-      </TopTab.Navigator>
+      {
+        keys.length > 0 && (
+          <TopTab.Navigator
+            lazy={true}
+            tabBarOptions={{
+              tabStyle: styles.tabStyle,
+              upperCaseLabel: false,
+              scrollEnabled: true,
+              style: {
+                backgroundColor: theme.themeColor
+              },
+              indicatorStyle: styles.indicatorStyle,
+              labelStyle: styles.labelStyle
+            }}
+          >
+            {
+              keys.filter(item => item.checked).map(tab => (
+                <TopTab.Screen
+                  key={tab.name}
+                  name={tab.name}
+                  // component={PopularTab}
+                  component={genPopularTab}
+                  options={{
+                    title: tab.name
+                  }}
+                />
+              ))
+            }
+          </TopTab.Navigator>
+        )
+      }
     </View>
   )
 }
+
+const mapPopularStateToProps = (state) => ({
+  keys: state.language.keys,
+  theme: state.theme.theme
+})
+const mapPopularDispatchToProps = dispatch => ({
+  onLoadLanguage: (flag) => {
+    dispatch(actions.onLoadLanguage(flag))
+  }
+})
+
+
+
 
 const PopularContent = (props) => {
   const toastRef = useRef(null)
   let canLoadMore = false
   let isFavoriteChanged = false
 
-  const [ a, setA ] = useState(false)
-  // console.log('PopularTab', props)
+  const [a, setA] = useState(false)
+  console.log('PopularTab', props)
 
-  const { popular, route } = props
+  const { popular, route, theme } = props
   console.log('popular-----', popular)
 
   const getStore = () => {
@@ -140,7 +163,7 @@ const PopularContent = (props) => {
       })
     } else if (refreshFavorite) {
       console.log('items', store.items)
-      onFlushPopularFavorite(storeName, store.pageIndex, PAGE_SIZE, store.items, favoriteDao)    
+      onFlushPopularFavorite(storeName, store.pageIndex, PAGE_SIZE, store.items, favoriteDao)
     } else {
       console.log('refresh')
       onRefreshPopular(storeName, url, PAGE_SIZE, favoriteDao)
@@ -190,6 +213,7 @@ const PopularContent = (props) => {
         renderItem={p =>
           <PopularItem
             // item={p.item}
+            theme={theme}
             projectModel={p.item}
             onSelect={(callback) => {
               console.log('跳转', p.item)
@@ -197,6 +221,7 @@ const PopularContent = (props) => {
                 navigation: props.navigation,
                 projectModel: p.item,
                 flag: FLAG_STORE.flag_popular,
+                theme,
                 callback
               }, 'Detail')
             }}
@@ -211,9 +236,9 @@ const PopularContent = (props) => {
         refreshControl={
           <RefreshControl
             title="Loading"
-            titleColor={THEME_COLOR}
-            tintColor={THEME_COLOR}
-            colors={[THEME_COLOR]}
+            titleColor={theme.themColor}
+            tintColor={theme.themColor}
+            colors={[theme.themColor]}
             refreshing={store.isLoading}
             onRefresh={() => {
               console.log('下拉刷新')
@@ -296,4 +321,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Popular
+export default connect(mapPopularStateToProps, mapPopularDispatchToProps)(Popular)

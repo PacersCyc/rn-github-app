@@ -3,6 +3,8 @@ import { TouchableOpacity } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const ShareButton = props => {
+  const { color = 'white' } = props
+
   return (
     <TouchableOpacity
       underlayColor="transparent"
@@ -14,7 +16,7 @@ const ShareButton = props => {
         style={{
           opacity: 0.9,
           marginRight: 10,
-          color: 'white'
+          color
         }}
       />
     </TouchableOpacity>
