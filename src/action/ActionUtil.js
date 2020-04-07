@@ -1,7 +1,7 @@
 import ProjectModel from '../model/ProjectModel';
 import { checkFavorite } from '../util';
 
-export function handleData(actionType, dispatch, storeName, data, pageSize, favoriteDao) {
+export function handleData(actionType, dispatch, storeName, data, pageSize, favoriteDao, params) {
   let fixItems = []
   if (data && data.data) {
     if (Array.isArray(data.data)) {
@@ -18,7 +18,8 @@ export function handleData(actionType, dispatch, storeName, data, pageSize, favo
       items: fixItems,
       projectModes: projectModels,
       storeName,
-      pageIndex: 1
+      pageIndex: 1,
+      ...params
     })
   }).catch(e => {
     console.log(e)

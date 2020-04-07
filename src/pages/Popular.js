@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { connect } from 'react-redux'
-import { Text, View, StyleSheet, FlatList, RefreshControl, ActivityIndicator } from 'react-native'
+import { Text, View, StyleSheet, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import Toast from 'react-native-easy-toast'
 import NavigationUtil from '../navigator/NavigationUtil';
 import actions from '../action'
@@ -28,7 +29,7 @@ const favoriteDao = new FavoriteDao(FLAG_STORE.flag_popular)
 
 const Popular = (props) => {
   console.log('Popular', props)
-  const { keys, theme, onLoadLanguage } = props
+  const { keys, theme, navigation, onLoadLanguage } = props
 
   const genPopularTab = p => <PopularTab {...p} theme={theme} />
 
@@ -50,6 +51,27 @@ const Popular = (props) => {
           backgroundColor: theme.themeColor,
           barStyle: 'light-content',
         }}
+        rightButton={
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Search', {
+                theme
+              })
+            }}
+          >
+            <View style={{padding: 5, marginRight: 8}}>
+              <Ionicons 
+                name='ios-search'
+                size={24}
+                style={{
+                  marginRight: 8,
+                  alignSelf: 'center',
+                  color: 'white'
+                }}
+              />
+            </View>
+          </TouchableOpacity>
+        }
       />
       {
         keys.length > 0 && (
