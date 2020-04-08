@@ -109,7 +109,7 @@ const MainScreen = () => {
 export const AppNavigator = (props) => {
   const navContainerRef = useRef(null)
 
-  useBackButton(navContainerRef.current)
+  useBackButton(navContainerRef)
 
   return (
     <NavigationContainer

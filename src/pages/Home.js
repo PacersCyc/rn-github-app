@@ -37,10 +37,10 @@ const Home = (props) => {
   }
 
   useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', onBackPress)
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', onBackPress)
-    }
+    // BackHandler.addEventListener('hardwareBackPress', onBackPress)
+    // return () => {
+    //   BackHandler.removeEventListener('hardwareBackPress', onBackPress)
+    // }
   }, [])
 
   return (

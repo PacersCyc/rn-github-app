@@ -1,5 +1,6 @@
 import React, { useRef, useMemo, useState, useCallback, useEffect } from 'react'
 import { Text, View, StyleSheet, TouchableOpacity, BackHandler } from 'react-native'
+import { useBackButton } from '@react-navigation/native'
 import { WebView } from 'react-native-webview'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -68,6 +69,9 @@ const Detail = (props) => {
   }, [url])
 
   const webviewRef = useRef(null)
+  const navigationRef = useRef(navigation)
+
+  useBackButton(navigationRef)
 
   const onFavoriteChange = () => {
     setIsFavorite(!isFavorite)
@@ -81,21 +85,21 @@ const Detail = (props) => {
     })
   }
 
-  const onBack = useCallback(() => {
+  const onBack = () => {
     if (canBack) {
       webviewRef.current.goBack()
     } else {
       navigation.goBack()
     }
-  }, [canBack])
+  }
 
   const onNavigationStateChange = e => {
+    console.log('webview页面路由变了', e)
     setCanBack(e.canGoBack)
     setUrl(e.url)
   }
 
   const onBackPress = () => {
-    // alert('back!!!')
     onBack()
     return true
   }
@@ -105,7 +109,7 @@ const Detail = (props) => {
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', onBackPress)
     }
-  }, [])
+  }, [onBackPress])
 
   return (
     <SafeAreaViewPlus
