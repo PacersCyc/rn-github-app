@@ -35,10 +35,11 @@ const Favorite = (props) => {
 
   return (
     <View
-      style={{
-        flex: 1,
-        marginTop: DeviceInfo.getSystemName() !== 'Android' ? 30 : 0
-      }}
+      style={styles.container}
+      // style={{
+      //   flex: 1,
+      //   marginTop: DeviceInfo.getSystemName() !== 'Android' ? 30 : 0
+      // }}
     >
       <NavigationBar
         title="收藏"

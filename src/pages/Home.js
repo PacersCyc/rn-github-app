@@ -7,6 +7,7 @@ import { CommonActions } from '@react-navigation/core'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Entypo from 'react-native-vector-icons/Entypo'
+import SafeAreaViewPlus from '../common/SafeAreaViewPlus'
 import actions from '../action'
 import Popular from './Popular';
 import Trending from './Trending';
@@ -18,7 +19,7 @@ import DynamicTabNavigator from '../navigator/DynamicTabNavigator'
 const BottomTab = createBottomTabNavigator()
 
 const Home = (props) => {
-  const { customThemeViewVisible, onShowCustomThemeView } = props
+  const { theme, customThemeViewVisible, onShowCustomThemeView } = props
 
   const onBackPress = () => {
     const { navigation, route } = props
@@ -43,7 +44,9 @@ const Home = (props) => {
   }, [])
 
   return (
-    <View style={{flex: 1}}>
+    <SafeAreaViewPlus
+      topColor={theme.themeColor}
+    >
       <DynamicTabNavigator />
       <CustomTheme 
         visible={customThemeViewVisible}
@@ -52,7 +55,7 @@ const Home = (props) => {
           onShowCustomThemeView(false)
         }}
       />
-    </View>
+    </SafeAreaViewPlus>
   )
 }
 
@@ -71,6 +74,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
+  theme: state.theme.theme,
   customThemeViewVisible: state.theme.customThemeViewVisible
 })
 const mapDispatchToProps = dispatch => ({

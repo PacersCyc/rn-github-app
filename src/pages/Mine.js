@@ -126,8 +126,8 @@ const Mine = (props) => {
           barStyle: 'light-content'
         }}
         style={theme.styles.navBar}
-        rightButton={<RightButton />}
-        leftButton={<LeftButton callback={() => { }} />}
+        // rightButton={<RightButton />}
+        // leftButton={<LeftButton callback={() => { }} />}
       />
       <ScrollView>
         <TouchableOpacity

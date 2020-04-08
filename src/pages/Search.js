@@ -4,6 +4,7 @@ import { Text, View, StyleSheet, FlatList, RefreshControl, ActivityIndicator, To
 import DeviceInfo from 'react-native-device-info'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import Toast from 'react-native-easy-toast'
+import SafeAreaViewPlus from '../common/SafeAreaViewPlus'
 import NavigationUtil from '../navigator/NavigationUtil';
 import actions from '../action'
 import LeftBackButton from '../common/LeftBackButton'
@@ -93,12 +94,8 @@ const Search = (props) => {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        marginTop: isIphoneX() ? 30 : 0
-      }}
-      // style={globalStyles.root_container}
+    <SafeAreaViewPlus
+      topColor={theme.themeColor}
     >
       {
         Platform.OS === 'ios' && !isIphoneX() && (
@@ -122,6 +119,8 @@ const Search = (props) => {
         <LeftBackButton onBack={onBack} />
         <TextInput
           ref={inputRef}
+          autoCapitalize="none"
+          placeholderTextColor="#fff"
           placeholder={inputKey || '请输入'}
           value={inputKey}
           onChangeText={text => {
@@ -236,7 +235,7 @@ const Search = (props) => {
         ref={toastRef}
         position="center"
       />
-    </View>
+    </SafeAreaViewPlus>
   )
 }
 

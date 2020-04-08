@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ViewPropTypes, View, StyleSheet, Text, StatusBar, Platform } from 'react-native'
+import { isIphoneX } from '../util'
 
 const NAV_BAR_HEIGHT_IOS = 44
 const NAV_BAR_HEIGHT_ANDROD = 50
-const STATUS_BAR_HEIGHT = 20
+const STATUS_BAR_HEIGHT = isIphoneX() ? 0 : 20
 
 const StatusBarShape = {
   barStyle: PropTypes.oneOf(['light-content', 'default']),

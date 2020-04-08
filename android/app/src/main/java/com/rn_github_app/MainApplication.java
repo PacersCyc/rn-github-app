@@ -7,6 +7,7 @@ import com.example.trackshare.TrackShare;
 import com.example.trackshare.TrackShareReactPackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;

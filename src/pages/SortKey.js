@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import SortableListView from 'react-native-sortable-listview'
+import SafeAreaViewPlus from '../common/SafeAreaViewPlus'
 import NavigationBar from '../common/NavigationBar'
 import LeftBackButton from '../common/LeftBackButton'
 import actions from '../action'
@@ -23,7 +24,7 @@ const RightButton = props => {
     >
       <Text
         style={{
-          fontSize: 20,
+          fontSize: 16,
           color: '#fff',
           marginRight: 10
         }}
@@ -104,7 +105,9 @@ const SortKey = props => {
   }, [realKeys])
 
   return (
-    <View style={styles.container}>
+    <SafeAreaViewPlus
+      topColor={theme.themeColor}
+    >
       <NavigationBar
         title={title}
         style={theme.styles.navBar}
@@ -139,7 +142,7 @@ const SortKey = props => {
         }}
         renderRow={(row) => <SortCell data={row} {...params} />}
       />
-    </View>
+    </SafeAreaViewPlus>
   )
 }
 

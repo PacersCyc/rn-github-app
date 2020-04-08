@@ -4,6 +4,7 @@ import { WebView } from 'react-native-webview'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import DeviceInfo from 'react-native-device-info'
+import SafeAreaViewPlus from '../common/SafeAreaViewPlus'
 import NavigationBar from '../common/NavigationBar';
 import FavoriteDao from '../expand/dao/FavoriteDao';
 
@@ -118,13 +119,12 @@ const WebviewPage = (props) => {
   }, [])
 
   return (
-    <View style={styles.container}>
+    <SafeAreaViewPlus
+      topColor={params.theme.themeColor}
+    >
       <NavigationBar 
         title={title}
         leftButton={<LeftBackButton onBack={() => onBackPress()} />}
-        // style={{
-        //   backgroundColor: THEME_COLOR
-        // }}
         style={params.theme.styles.navBar}
       />
       <WebView 
@@ -135,7 +135,7 @@ const WebviewPage = (props) => {
         startInLoadingState={true}
         onNavigationStateChange={onNavigationStateChange}
       />
-    </View>
+    </SafeAreaViewPlus>
   )
 }
 

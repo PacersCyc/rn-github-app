@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import { Text, View, StyleSheet } from 'react-native'
+import SplashScreen from 'react-native-splash-screen'
 import NavigationUtil from '../navigator/NavigationUtil';
 
 const Welcome = (props) => {
@@ -10,6 +11,7 @@ const Welcome = (props) => {
   useEffect(() => {
     timer.current = setTimeout(() => {
       const { navigation, goToMain } = props
+      SplashScreen.hide()
       goToMain()
       // navigation.navigate('Main')
       // NavigationUtil.resetToHomePage({
@@ -21,11 +23,12 @@ const Welcome = (props) => {
     }
   }, [])
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.welcome}>Welcome</Text>
-    </View>
-  )
+  // return (
+  //   <View style={styles.container}>
+  //     <Text style={styles.welcome}>Welcome</Text>
+  //   </View>
+  // )
+  return null
 }
 
 const styles = StyleSheet.create({

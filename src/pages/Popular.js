@@ -40,10 +40,7 @@ const Popular = (props) => {
 
   return (
     <View
-      style={{
-        flex: 1,
-        marginTop: DeviceInfo.getSystemName() !== 'Android' ? 30 : 0
-      }}
+      style={styles.container}
     >
       <NavigationBar
         title="最热"

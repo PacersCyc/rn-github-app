@@ -4,6 +4,7 @@ import { WebView } from 'react-native-webview'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import DeviceInfo from 'react-native-device-info'
+import SafeAreaViewPlus from '../common/SafeAreaViewPlus'
 import NavigationBar from '../common/NavigationBar';
 import LeftBackButton from '../common/LeftBackButton'
 import ShareButton from '../common/ShareButton'
@@ -107,7 +108,9 @@ const Detail = (props) => {
   }, [])
 
   return (
-    <View style={styles.container}>
+    <SafeAreaViewPlus
+      topColor={theme.themeColor}
+    >
       <NavigationBar
         title={full_name || fullName}
         titleLayoutStyle={titleLayoutStyle}
@@ -129,7 +132,7 @@ const Detail = (props) => {
         startInLoadingState={true}
         onNavigationStateChange={onNavigationStateChange}
       />
-    </View>
+    </SafeAreaViewPlus>
   )
 }
 

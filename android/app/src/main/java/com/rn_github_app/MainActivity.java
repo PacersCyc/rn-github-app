@@ -9,6 +9,8 @@ import com.facebook.react.ReactActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
 
+import org.devio.rn.splashscreen.SplashScreen;
+
 public class MainActivity extends ReactActivity {
 
   /**
@@ -22,6 +24,7 @@ public class MainActivity extends ReactActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    SplashScreen.show(this);
     super.onCreate(savedInstanceState);
     //以及发送间隔
     MobclickAgent.setSessionContinueMillis(1000);

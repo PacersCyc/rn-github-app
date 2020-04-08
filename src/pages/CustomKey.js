@@ -3,6 +3,7 @@ import { View, TouchableOpacity, Text, StyleSheet, ScrollView, Alert } from 'rea
 import { connect } from 'react-redux'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import CheckBox from 'react-native-check-box'
+import SafeAreaViewPlus from '../common/SafeAreaViewPlus'
 import NavigationBar from '../common/NavigationBar'
 import LeftBackButton from '../common/LeftBackButton'
 import actions from '../action'
@@ -22,7 +23,7 @@ const RightButton = props => {
     >
       <Text
         style={{
-          fontSize: 20,
+          fontSize: 16,
           color: '#fff',
           marginRight: 10
         }}
@@ -152,7 +153,9 @@ const CustomKey = props => {
   }, [realKeys])
 
   return (
-    <View style={styles.container}>
+    <SafeAreaViewPlus
+      topColor={theme.themeColor}
+    >
       <NavigationBar
         title={title}
         style={theme.styles.navBar}
@@ -181,7 +184,7 @@ const CustomKey = props => {
           ))
         }
       </ScrollView>
-    </View>
+    </SafeAreaViewPlus>
   )
 }
 
