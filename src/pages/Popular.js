@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { connect } from 'react-redux'
-import { Text, View, StyleSheet, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { Text, View, StyleSheet, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity, Platform } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -16,6 +16,7 @@ import EventBus from 'react-native-event-bus';
 import eventTypes from '../eventTypes'
 import FavoriteButton from '../common/FavoriteButton'
 import { FLAG_LANGUAGE } from '../expand/dao/LanguageDao';
+import AnalyticsUtil from '../nativeUtil/AnalyticsUtil'
 
 const URL = 'https://api.github.com/search/repositories?q='
 const QUERY_STR = '&sort=stars'
@@ -54,6 +55,10 @@ const Popular = (props) => {
         rightButton={
           <TouchableOpacity
             onPress={() => {
+              console.log('ana', AnalyticsUtil)
+              // 埋点
+              // AnalyticsUtil.track('SearchButtonClick')
+              AnalyticsUtil.onEvent('SearchButtonClick')
               navigation.navigate('Search', {
                 theme
               })
@@ -260,7 +265,8 @@ const PopularContent = (props) => {
             title="Loading"
             titleColor={theme.themColor}
             tintColor={theme.themColor}
-            colors={[theme.themColor]}
+            // colors={Platform.OS === 'ios' ? [theme.themColor] : theme.themColor}
+            colors={theme ? [theme.themColor || '#2196F3'] : ['#2196F3']}
             refreshing={store.isLoading}
             onRefresh={() => {
               console.log('下拉刷新')

@@ -8,13 +8,15 @@ import NavigationBar from '../common/NavigationBar';
 import LeftBackButton from '../common/LeftBackButton'
 import ShareButton from '../common/ShareButton'
 import FavoriteDao from '../expand/dao/FavoriteDao';
+import ShareUtil from '../nativeUtil/ShareUtil'
+import shareData from '../res/data/share.json'
 
 const URL = 'https://github.com/'
 const THEME_COLOR = '#678'
 
 const RightButtonComp = props => {
   console.log('RightButton', props)
-  const { isFavorite, onPress } = props
+  const { isFavorite, onPress, onShare } = props
 
   return (
     <View
@@ -27,8 +29,8 @@ const RightButtonComp = props => {
           onPress()
         }}
       >
-        <FontAwesome 
-          name={isFavorite ? "star" :"star-o"}
+        <FontAwesome
+          name={isFavorite ? "star" : "star-o"}
           size={20}
           style={{
             color: 'white',
@@ -36,8 +38,10 @@ const RightButtonComp = props => {
           }}
         />
       </TouchableOpacity>
-      <ShareButton 
-        onPress={() => {}}
+      <ShareButton
+        onPress={() => {
+          onShare()
+        }}
       />
     </View>
   )
@@ -52,9 +56,9 @@ const Detail = (props) => {
 
   const favoriteDao = new FavoriteDao(flag)
 
-  const [ isFavorite, setIsFavorite ] = useState(projectModel.isFavorite)
-  const [ canBack, setCanBack ] = useState(false)
-  const [ url, setUrl ] = useState(html_url || (URL + fullName))
+  const [isFavorite, setIsFavorite] = useState(projectModel.isFavorite)
+  const [canBack, setCanBack] = useState(false)
+  const [url, setUrl] = useState(html_url || (URL + fullName))
 
   const titleLayoutStyle = useMemo(() => {
     return url.length > 20 ? {
@@ -67,14 +71,13 @@ const Detail = (props) => {
   const onFavoriteChange = () => {
     setIsFavorite(!isFavorite)
     typeof callback === 'function' && callback(!isFavorite)
-    // let key = fullName || id.toString()
-    // console.log('key', key)
-    // console.log(favoriteDao)
-    // if (!projectModel.isFavorite) {
-    //   favoriteDao.saveFavoriteItem(key, JSON.stringify(projectModel.item))
-    // } else {
-    //   favoriteDao.removeFavoriteItem(key)
-    // }
+  }
+
+  const onShare = () => {
+    const shareApp = shareData.share_app
+    ShareUtil.shareboard(shareApp.content, shareApp.imgurl, url, shareApp.title, [0, 1, 2, 3, 4, 5, 6], (code, message) => {
+      console.log('result: ' + code + message)
+    })
   }
 
   const onBack = useCallback(() => {
@@ -105,19 +108,20 @@ const Detail = (props) => {
 
   return (
     <View style={styles.container}>
-      <NavigationBar 
+      <NavigationBar
         title={full_name || fullName}
         titleLayoutStyle={titleLayoutStyle}
         leftButton={<LeftBackButton onBack={onBack} />}
         rightButton={
-          <RightButtonComp 
+          <RightButtonComp
             isFavorite={isFavorite}
             onPress={onFavoriteChange}
+            onShare={onShare}
           />
         }
         style={theme.styles.navBar}
       />
-      <WebView 
+      <WebView
         source={{
           uri: url
         }}

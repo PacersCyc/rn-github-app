@@ -2,8 +2,12 @@ package com.rn_github_app;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.example.trackshare.TrackShare;
+import com.example.trackshare.TrackShareReactPackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
@@ -25,6 +29,8 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
+            // packages.add(new VectorIconsPackage());
+            packages.add(new TrackShareReactPackage());
           return packages;
         }
 
@@ -44,6 +50,8 @@ public class MainApplication extends Application implements ReactApplication {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this); // Remove this line if you don't want Flipper enabled
+      TrackShare.init(this);
+      // RNUMConfigure.init(this, "5e8c9337570df385cf00011d", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "669c30a9584623e70e8cd01b0381dcb4");
   }
 
   /**

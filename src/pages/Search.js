@@ -123,6 +123,7 @@ const Search = (props) => {
         <TextInput
           ref={inputRef}
           placeholder={inputKey || '请输入'}
+          value={inputKey}
           onChangeText={text => {
             console.log(text)
             setInputKey(text.trim())
