@@ -16,6 +16,7 @@ import CustomKey from '../pages/CustomKey'
 import SortKey from '../pages/SortKey'
 import Search from '../pages/Search'
 import WebviewPage from '../pages/WebviewPage'
+import CodePushPage from '../pages/CodePush'
 import eventTypes from '../eventTypes'
 
 const InitStack = createStackNavigator()
@@ -98,6 +99,13 @@ const MainScreen = () => {
       <MainStack.Screen 
         name="WebviewPage"
         component={WebviewPage}
+        options={{
+          headerShown: false
+        }}
+      />
+      <MainStack.Screen 
+        name="CodePushPage"
+        component={CodePushPage}
         options={{
           headerShown: false
         }}

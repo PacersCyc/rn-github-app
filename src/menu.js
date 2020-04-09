@@ -58,5 +58,10 @@ export const MENUS = {
     name: '分享',
     Icons: Ionicons,
     icon: 'md-share'
+  },
+  CodePush: {
+    name: 'CodePush',
+    Icons: Ionicons,
+    icon: 'ios-planet'
   }
 }

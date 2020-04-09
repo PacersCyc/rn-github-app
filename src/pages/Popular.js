@@ -43,7 +43,7 @@ const Popular = (props) => {
       style={styles.container}
     >
       <NavigationBar
-        title="最热"
+        title="最热项目"
         style={theme.styles.navBar}
         statusBar={{
           backgroundColor: theme.themeColor,

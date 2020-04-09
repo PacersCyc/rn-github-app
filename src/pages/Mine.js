@@ -94,6 +94,9 @@ const Mine = (props) => {
         routeName = 'SortKey'
         params.flag = FLAG_LANGUAGE.flag_language
         break;
+      case MENUS.CodePush:
+        routeName = 'CodePushPage'
+        break;
       case MENUS.Custom_Theme:
         onShowCustomThemeView(true)
         break;
@@ -178,6 +181,8 @@ const Mine = (props) => {
         {genSettingItem(MENUS.About_Author)}
         <View style={globalStyles.line} />
         {genSettingItem(MENUS.Feedback)}
+        <View style={globalStyles.line} />
+        {genSettingItem(MENUS.CodePush)}
 
       </ScrollView>
     </View>

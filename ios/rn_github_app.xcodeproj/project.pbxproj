@@ -12,6 +12,8 @@
 		091B5A46243D825000B9FCBF /* UMShareModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 091B5A44243D824F00B9FCBF /* UMShareModule.m */; };
 		09552066243CBDB2002F9FB0 /* UMAnalyticsModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 09552062243CBDB2002F9FB0 /* UMAnalyticsModule.m */; };
 		09552067243CBDB2002F9FB0 /* RNUMConfigure.m in Sources */ = {isa = PBXBuildFile; fileRef = 09552064243CBDB2002F9FB0 /* RNUMConfigure.m */; };
+		0996CD0A243F20C1000794C7 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 0996CD08243F20C1000794C7 /* assets */; };
+		0996CD0B243F20C1000794C7 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 0996CD09243F20C1000794C7 /* main.jsbundle */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -73,6 +75,8 @@
 		09552064243CBDB2002F9FB0 /* RNUMConfigure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNUMConfigure.m; sourceTree = "<group>"; };
 		09552065243CBDB2002F9FB0 /* UMAnalyticsModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMAnalyticsModule.h; sourceTree = "<group>"; };
 		09552068243CBF68002F9FB0 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		0996CD08243F20C1000794C7 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../bundles/assets; sourceTree = "<group>"; };
+		0996CD09243F20C1000794C7 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = ../bundles/main.jsbundle; sourceTree = "<group>"; };
 		0B7D4942A529494A9DD24F7F /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* rn_github_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rn_github_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = rn_github_app/AppDelegate.h; sourceTree = "<group>"; };
@@ -205,6 +209,8 @@
 		13B07FAE1A68108700A75B9A /* rn_github_app */ = {
 			isa = PBXGroup;
 			children = (
+				0996CD08243F20C1000794C7 /* assets */,
+				0996CD09243F20C1000794C7 /* main.jsbundle */,
 				091B5A45243D824F00B9FCBF /* UMShareModule.h */,
 				091B5A44243D824F00B9FCBF /* UMShareModule.m */,
 				09552063243CBDB2002F9FB0 /* RNUMConfigure.h */,
@@ -417,10 +423,12 @@
 				034DB968E49B4454A772DB5B /* EvilIcons.ttf in Resources */,
 				8724E19A92474C0D9BD13625 /* Feather.ttf in Resources */,
 				552F0F96E3E24208952C9492 /* FontAwesome.ttf in Resources */,
+				0996CD0B243F20C1000794C7 /* main.jsbundle in Resources */,
 				C6053CCEE9244466B5FAB3BB /* FontAwesome5_Brands.ttf in Resources */,
 				5911C54954ED4F11A71C51DA /* FontAwesome5_Regular.ttf in Resources */,
 				C02D491BBDCC4E76BB71C298 /* FontAwesome5_Solid.ttf in Resources */,
 				C73F6D0CB9914F9E91099E5B /* Fontisto.ttf in Resources */,
+				0996CD0A243F20C1000794C7 /* assets in Resources */,
 				CAC1DDD41F9643158D3EB605 /* Foundation.ttf in Resources */,
 				739716630590414DB29122B4 /* Ionicons.ttf in Resources */,
 				83AD58A28ED14F28B36DB6FE /* MaterialCommunityIcons.ttf in Resources */,

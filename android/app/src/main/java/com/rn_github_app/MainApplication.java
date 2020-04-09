@@ -3,12 +3,15 @@ package com.rn_github_app;
 import android.app.Application;
 import android.content.Context;
 
+import androidx.annotation.Nullable;
+import androidx.multidex.MultiDex;
+
 import com.example.trackshare.TrackShare;
 import com.example.trackshare.TrackShareReactPackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import org.devio.rn.splashscreen.SplashScreenReactPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
+
+import com.microsoft.codepush.react.CodePush;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
@@ -24,7 +27,13 @@ public class MainApplication extends Application implements ReactApplication {
           return BuildConfig.DEBUG;
         }
 
-        @Override
+          @Nullable
+          @Override
+          protected String getJSBundleFile() {
+              return CodePush.getJSBundleFile();
+          }
+
+          @Override
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
@@ -49,6 +58,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+      MultiDex.install(this);
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this); // Remove this line if you don't want Flipper enabled
       TrackShare.init(this);
